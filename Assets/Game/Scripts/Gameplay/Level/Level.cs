@@ -1,3 +1,4 @@
+using AtoGame.Base;
 using ScratchCardAsset;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,8 +9,9 @@ namespace DP
     public class Level : MonoBehaviour
     {
         [SerializeField] private ScratchCardManager[] allScratchCards;
-        [SerializeField] private CompleteScratchCondition[] completeCardConditions;
+        [SerializeField] private ConditionMono winCondition;
 
+        [SerializeField] private TMPro.TextMeshProUGUI txtResult; 
         private int tounchScratchCount;
 
         private void Start()
@@ -27,8 +29,10 @@ namespace DP
                 card.Card.ScratchCardInput.OnBeginScratch += OnBeginScratch;
                 card.Card.ScratchCardInput.OnEndScratch += OnEndScratch;
             }
+            txtResult.text = string.Empty;
         }
 
+      
         public void StartLevel()
         {
             tounchScratchCount = 0;
@@ -49,6 +53,7 @@ namespace DP
 
         private void OnBeginScratch()
         {
+            txtResult.text = string.Empty;
             tounchScratchCount++;
 
         }
@@ -64,24 +69,19 @@ namespace DP
 
         private void CheckWin()
         {
-            bool isWin = true;
-            foreach (var condition in completeCardConditions)
-            {
-                if(condition.CheckWin() == false)
-                {
-                    isWin = false;
-                    break;
-                }
-            }
+            bool isWin = winCondition.CheckCondition();
 
             if(isWin)
             {
                 Debug.LogError("Win");
+                RestartLevel();
+                txtResult.text = "Win";
             }
             else
             {
                 Debug.LogError("Lose");
                 RestartLevel();
+                txtResult.text = "Lose";
             }
         }
 
