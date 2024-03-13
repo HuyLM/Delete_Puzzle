@@ -1,4 +1,5 @@
 using AtoGame.Base;
+using DG.Tweening;
 using ScratchCardAsset;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,11 +9,10 @@ namespace DP
 {
     public class Level : MonoBehaviour
     {
-        [SerializeField] private ScratchCardManager[] allScratchCards;
-        [SerializeField] private ConditionMono winCondition;
+        [SerializeField] private Step[] steps;
+        [SerializeField] TMPro.TextMeshProUGUI txtResult;
 
-        [SerializeField] private TMPro.TextMeshProUGUI txtResult; 
-        private int tounchScratchCount;
+        private int curStepIndex;
 
         private void Start()
         {
@@ -22,12 +22,9 @@ namespace DP
 
         public void InitLevel()
         {
-            foreach (var card in allScratchCards)
+            foreach (var s in steps)
             {
-                card.InputEnabled = false;
-                card.Card.Init();
-                card.Card.ScratchCardInput.OnBeginScratch += OnBeginScratch;
-                card.Card.ScratchCardInput.OnEndScratch += OnEndScratch;
+                s.InitStep();
             }
             txtResult.text = string.Empty;
         }
@@ -35,67 +32,34 @@ namespace DP
       
         public void StartLevel()
         {
-            tounchScratchCount = 0;
-            foreach (var card in allScratchCards)
-            {
-                card.InputEnabled = true;
-            }
+            curStepIndex = 0;
+            StartCurrentStep();
         }
 
-        private void RestartLevel()
+        private void StartCurrentStep()
         {
-            tounchScratchCount = 0;
-            foreach (var card in allScratchCards)
-            {
-                card.Card.ClearInstantly();
-            }
+            steps[curStepIndex].StartStep();
+            steps[curStepIndex].SetOnComplete(OnStepWin);
         }
 
-        private void OnBeginScratch()
-        {
-            txtResult.text = string.Empty;
-            tounchScratchCount++;
 
-        }
-
-        private void OnEndScratch()
+        private void OnStepWin()
         {
-            tounchScratchCount--;
-            if(tounchScratchCount <= 0)
+            steps[curStepIndex].EndStep();
+            curStepIndex++;
+            if(curStepIndex == steps.Length)
             {
-                CheckWin();
-            }
-        }
-
-        private void CheckWin()
-        {
-            bool isWin = winCondition.CheckCondition();
-
-            if(isWin)
-            {
-                Debug.LogError("Win");
-                RestartLevel();
-                txtResult.text = "Win";
+                WinLevel();
             }
             else
             {
-                Debug.LogError("Lose");
-                RestartLevel();
-                txtResult.text = "Lose";
+                StartCurrentStep();
             }
         }
 
-        [System.Serializable]
-        public class CompleteScratchCondition
+        private void WinLevel()
         {
-            public ScratchCardManager ScratchCard;
-            [Range(0, 1)] public float NeedEraseProgress;
-
-            public bool CheckWin()
-            {
-                Debug.LogError(ScratchCard.Progress.GetProgress());
-                return ScratchCard.Progress.GetProgress() >= NeedEraseProgress;
-            }
+            txtResult.text = "Win";
         }
     }
 }

@@ -84,6 +84,7 @@ namespace ScratchCardAsset
 
 		private const string BlendOpShaderParam = "_BlendOpValue";
 		private const string SourceTexProperty = "_SourceTex";
+		private bool isInitialized;
 
 
 
@@ -138,6 +139,11 @@ namespace ScratchCardAsset
 
 		public void Init()
 		{
+			if(isInitialized)
+            {
+				return;
+            }
+			isInitialized = true;
 			GetScratchBounds();
 			InitVariables();
 			InitTriangle();
