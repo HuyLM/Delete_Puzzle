@@ -12,7 +12,6 @@ namespace ScratchCardAsset
 			CanvasRenderer
 		}
 
-		public Camera MainCamera;
 		public ScratchCardRenderType RenderType;
 		public Sprite ScratchSurfaceSprite;
 		public bool ScratchSurfaceSpriteHasAlpha;
@@ -39,11 +38,6 @@ namespace ScratchCardAsset
 			{
 				Debug.LogError("ScratchCard is null!");
 				return;
-			}
-
-			if (Card.MainCamera == null)
-			{
-				Card.MainCamera = MainCamera != null ? MainCamera : Camera.main;
 			}
 
 			Material scratchSurfaceMaterial = null;

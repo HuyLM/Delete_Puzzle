@@ -21,8 +21,10 @@ namespace DP
 
         public void InitStep()
         {
+            Camera mainCamera = GameplayCamera.Instance.Camera;
             foreach (var card in allScratchCards)
             {
+                card.Card.MainCamera = mainCamera;
                 card.Card.Init();
             }
         }
