@@ -1,6 +1,6 @@
 using AtoGame.OtherModules.HUD;
 
-namespace StickerBook
+namespace DP
 {
     public class PanelHUD : HUD<PanelHUD>
     {

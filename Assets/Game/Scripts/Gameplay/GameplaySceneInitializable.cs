@@ -1,21 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace DP
 {
-    public class GameplaySceneInitializable : MonoBehaviour
+    public class GameplaySceneInitializable : SceneInitializable
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private Transform tfMapContainer;
+
+
+        private AsyncOperationHandle<GameObject> operation;
+        private Level level;
+
+        public override IEnumerator IInitialize()
         {
-        
+            AssetReferenceGameObject _asMap = DataConfigs.Instance.TempLevel;
+
+            operation = _asMap.InstantiateAsync(tfMapContainer);
+            yield return operation;
+            level = operation.Result.GetComponent<Level>();
         }
 
-        // Update is called once per frame
-        void Update()
+        public override IEnumerator Release()
         {
-        
+            Addressables.Release(operation);
+            yield return Resources.UnloadUnusedAssets();
         }
     }
 }

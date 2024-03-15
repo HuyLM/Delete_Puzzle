@@ -10,7 +10,6 @@ namespace DP
     public class Level : MonoBehaviour
     {
         [SerializeField] private Step[] steps;
-        [SerializeField] TMPro.TextMeshProUGUI txtResult;
 
         private int curStepIndex;
 
@@ -26,7 +25,6 @@ namespace DP
             {
                 s.InitStep();
             }
-            txtResult.text = string.Empty;
         }
 
       
@@ -38,7 +36,6 @@ namespace DP
 
         private void StartCurrentStep()
         {
-            Debug.LogError("StartCurrentStep: " + curStepIndex);
             steps[curStepIndex].StartStep();
             steps[curStepIndex].SetOnComplete(OnStepWin);
         }
@@ -46,7 +43,6 @@ namespace DP
 
         private void OnStepWin()
         {
-            Debug.LogError("OnStepWin: " + curStepIndex);
             steps[curStepIndex].EndStep();
             curStepIndex++;
             if(curStepIndex == steps.Length)
@@ -61,7 +57,6 @@ namespace DP
 
         private void WinLevel()
         {
-            txtResult.text = "Win";
         }
     }
 }

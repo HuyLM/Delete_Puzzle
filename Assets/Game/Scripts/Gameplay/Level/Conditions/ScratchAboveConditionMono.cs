@@ -13,7 +13,6 @@ namespace DP
 
         public override bool CheckCondition()
         {
-            Debug.LogError("ScratchAboveConditionMono: " + scratchCard.Progress.GetProgress());
             return scratchCard.Progress.GetProgress() >= eraseProgress;
         }
     }

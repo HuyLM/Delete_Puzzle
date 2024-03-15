@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace StickerBook
+namespace AtoGame.OtherModules.SoundManager
 {
     public class SoundManager<T> : SingletonBindAlive<T> where T : SoundManager<T>
     {
